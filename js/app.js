@@ -1,34 +1,27 @@
 // D3 Homework
 // Submitted by Farshad Esnaashari
 
-function makeResponsive() {
-
-  // if the SVG area isn't empty when the browser loads,
-  // remove it and replace it with a resized version of the chart
-  var svgArea = d3.select("body").select("svg");
-
-  // clear svg is not empty
-  if (!svgArea.empty()) {
-    svgArea.remove();
-  }
-};
 
 // Set up the svg area
+//***************************
 
 var svgWidth = 960;
 var svgHeight = 500;
 
 var margin = {
   top: 20,
-  right: 20,
-  bottom: 90,
-  left: 50
+  right: 40,
+  bottom: 60,
+  left: 100
 };
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+// Create an SVG wrapper, append an SVG group that will hold our chart, 
+// and shift the latter by left and top margins.
+//****************************
+
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -38,29 +31,36 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // import data 
+//****************************
 d3.csv('data/data.csv').then( function(censusData){
-    
     console.log(  censusData[0]);
     // parse data
     censusData.forEach(function(data){
     data.poverty = +data.poverty;
     data.healthcare = +data.healthcare;
+    data.age = +data.age;
+    data.income =+data.income;
+    data.smokes = +data.smokes;
+    data.obesity = +data.obesity;
     });
   
     // create scale functions
+    //***********************
     var  xScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d.poverty) -1, d3.max(censusData, d => d.poverty)+2])
+    .domain([d3.min(censusData, d => d.poverty)*.9, d3.max(censusData, d => d.poverty)*1.1])
     .range([0, width]);
 
     var yScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d.healthcare)-1, d3.max(censusData, d => d.healthcare )+2])
+    .domain([0, d3.max(censusData, d => d.healthcare )])
     .range([height, 0]);
 
     // create axes functions
+    //*********************** 
     var bottomAxis = d3.axisBottom(xScale);
     var leftAxis = d3.axisLeft(yScale)
   
     // append axes to the chart
+    //*************************
     chartGroup.append('g')
     .attr('transform', `translate(0, ${height})`)
     .call(bottomAxis);
@@ -69,41 +69,61 @@ d3.csv('data/data.csv').then( function(censusData){
     .call(leftAxis);
 
     //create circles
-    console.log('census data', censusData);
-    chartGroup.selectAll("circle")
+    //***************
+
+    var circlesGroup = chartGroup.selectAll("circle")
     .data(censusData)
     .enter()
     .append("circle")
-    .classed('stateCircle', true)
+    .attr('class', 'stateCircle')
     .attr("cx", d => xScale(d.poverty))
     .attr("cy", d => yScale(d.healthcare))
     .attr("r", "15");
-    chartGroup.exit().remove();
 
-    // add state abbrevations to the circles
-
-    chartGroup.selectAll('text')
+    //add state abbrevations to the circles
+     var textsGroup = chartGroup.selectAll(null)
     .data(censusData)
     .enter()
     .append("text")
-    .classed("stateText", true)
+    .attr("class", "stateText")
     .attr("x", d => xScale(d.poverty))
     .attr("y", d => yScale(d.healthcare))
     .text( d => d.abbr);  
     
     chartGroup.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left)
+    .attr("y", 0 - margin.left+40)
     .attr("x", 0 - (height / 2))
-    .attr("dy", "1em")
-    .classed("aText", true)
+    .attr("dy", "1em")  
+    .attr("class", "aText")
+    .style('text-anchor', 'middle')
     .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
-    .attr("transform", `translate(${width / 2}, ${height + margin.top + 37})`)
+    .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
     .attr("text-anchor", "middle")
-    .classed("aText", true)
+    .attr("class", "aText")
     .text("In Poverty (%)");
+
+    // Initialize tooltip
+    var toolTip = d3.tip() 
+    .attr("class", "d3-tip")
+    .offset([80, -60])
+    .html(function(d) {
+        return  `${d.state}<br>In Poverty: ${d.poverty}%<br>Lacks Healthcare: ${d.healthcare}%<br>`; 
+    });
+    
+    // Create tooltip in the chart
+    textsGroup.call(toolTip);
+  
+    // Create event listeners to display and hide the tooltip
+    textsGroup.on("mouseover", function(data) {
+      toolTip.show(data, this);
+    })
+      // onmouseout event
+      .on("mouseout", function(data) {
+        toolTip.hide(data);
+      });
 
 }).catch( function(error){
     console.log(error)
