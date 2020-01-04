@@ -5,7 +5,7 @@
 // set up svg height and width
 
 svgWidth = 960;
-svgHeight = 500;
+svgHeight = 590;
 
 var margin = {
   top: 10,
@@ -39,7 +39,7 @@ var chosenYAxis = 'healthcare';
 function xScale (censusData, chosenXAxis) {
 // create a scale
   var xLinearScale = d3.scaleLinear()
-    .domain([d3.min(censusData, d => d[chosenXAxis]) *.9, d3.max(censusData, d => d[chosenXAxis])*1.1])
+    .domain([d3.min(censusData, d => d[chosenXAxis])*.9, d3.max(censusData, d => d[chosenXAxis])*1.1])
     .range([0, width]);
 
   return xLinearScale;
@@ -49,7 +49,7 @@ function xScale (censusData, chosenXAxis) {
 //create a function to scale the y-axis based on the chosen y axis
 function yScale (censusData, chosenYAxis) {
   var yLinearScale = d3.scaleLinear()
-  .domain([d3.min(censusData, d => d[chosenYAxis])*.8, d3.max(censusData, d => d[chosenYAxis])])
+  .domain([d3.min(censusData, d => d[chosenYAxis])-2, d3.max(censusData, d => d[chosenYAxis])+1])
   .range([height, 0]);
 
   return yLinearScale;
@@ -211,7 +211,7 @@ d3.csv('data/data.csv').then( function (censusData){
     .append("text")
     .attr("class", "stateText")
     .attr("x", d => xLinearScale(d[chosenXAxis]))
-    .attr("y", d => yLinearScale(d.healthcare))
+    .attr("y", d => yLinearScale(d.healthcare)) 
     .text( d => d.abbr); 
 
   // 8. create a group for the 3 x axes labels
