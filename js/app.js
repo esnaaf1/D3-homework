@@ -2,7 +2,7 @@
 // Submitted by Farshad Esnaaashari
 
 
-// set up svg height and width
+// set up the svg area height and width
 
 svgWidth = 960;
 svgHeight = 590;
@@ -14,12 +14,12 @@ var margin = {
   bottom: 140
 };
 
-// set up the chart height and width
+// set up the chart area height and width
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// create a svg wrapper and append a svg group to tag id=scatter that holds the char
+// create a svg wrapper and append a svg group to the tag id "scatter" that holds the chart
 
 var svg = d3.select('#scatter')
   .append('svg')
@@ -84,7 +84,7 @@ function renderCircles(circlesGroup, newXScale, newYScale, chosenXAxis, chosenYA
   circlesGroup.transition()
     .duration(1000)
     .attr('cx', d => newXScale(d[chosenXAxis]))
-    .attr('cy', d => newYScale(d[chosenYAxis]));
+    .attr('cy', d => newYScale(d[chosenYAXis]));
 
   return circlesGroup;
 }
