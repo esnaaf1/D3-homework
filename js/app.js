@@ -280,7 +280,7 @@ d3.csv('data/data.csv').then( function (censusData){
 
 
   // 10. update tool tip
-  
+
   var textsGroup = updateToolTip(chosenXAxis, chosenYAxis, textsGroup);
 
   // 11. create an event listener for the x axis labels
