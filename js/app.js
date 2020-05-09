@@ -1,5 +1,5 @@
-// D3 Homework, level 2
-// Submitted by Farshad Esnaaashari
+// Health and Poverty in the United States
+// Farshad Esnaashari
 
 
 // set up the svg area height and width
