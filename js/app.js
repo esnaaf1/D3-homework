@@ -396,7 +396,7 @@ d3.csv('data/data.csv').then( function (censusData){
               .classed('active', false)
               .classed('inactive', true);
             smokesLabel
-              .classed('active', false)
+              .classed('active', true)
               .classed('inactive', false);
             obesityLabel
               .classed('active', false)
