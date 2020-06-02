@@ -1,6 +1,5 @@
 # HEALTH-AND-POVERTY
 
-
 Poverty has long been recognized as a contributor to death and disease, but several recent trends have generated an increased focus on the link between income and health. 
 
 In this project, using Javascript D3, I demonstrate the correlation between health risks such as smoking, obesity and lack of access to health care versus poverty by age and income across the united states. 
